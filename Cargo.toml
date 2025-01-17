@@ -1,0 +1,13 @@
+[package]
+name = "pareto_r"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+cc = "1.2.10"
+cty = "0.2.2"
+pstools_r = {git = "https://github.com/profmadden/pstools_r"}
+
+[build-dependencies]
+cc = "1.2.10"
+
