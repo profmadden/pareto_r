@@ -1,6 +1,8 @@
 use pareto_r;
 use argh::FromArgs;
 
+
+
 #[derive(FromArgs)]
 /// Pareto optimal set finding example.
 struct ParArgs {
