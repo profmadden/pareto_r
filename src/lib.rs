@@ -1,4 +1,12 @@
 use cty;
+use scan_fmt::scan_fmt;
+use std::fs::File;
+use std::io::BufRead;
+use std::io::BufReader;
+use std::io::Error;
+use std::io::ErrorKind;
+
+
 use pstools_r;
 
 extern "C" {
@@ -36,6 +44,39 @@ impl ParetoProblem {
             dimensions,
     	}
     }
+    pub fn from_file(filename: &String) -> ParetoProblem {
+        let f = File::open(filename).unwrap();
+        let mut reader = BufReader::with_capacity(1000, f);
+        let line = ParetoProblem::getline(&mut reader);
+
+	    ParetoProblem {
+    	    points: Vec::new(),
+            dimensions: 3,
+    	}
+    }
+    fn getline(reader: &mut BufReader<File>) -> std::io::Result<String> {
+        loop {
+            let mut line = String::new();
+            let _len = reader.read_line(&mut line).unwrap();
+            // println!("Read in {} bytes, line {}", _len, line);
+
+            if _len == 0 {
+                return std::result::Result::Err(Error::new(ErrorKind::Other, "end of file"));
+            }
+
+            if line.starts_with("#") {
+                // println!("Skip comment.");
+                continue;
+            }
+
+            if _len == 1 {
+                continue;
+            }
+
+            return Ok(line.trim().to_string());
+        }
+    }
+
     pub fn add_point(&mut self, tag: cty::c_int, values: Vec<cty::c_float>) {
         self.points.push(ParetoPoint{
             v: values.clone(),
@@ -44,7 +85,9 @@ impl ParetoProblem {
         });
     }
     pub fn solve(&mut self) {
+        #[cfg(feature = "debug")]
         println!("Solving the pareto problem!");
+
         unsafe {
             pareto_set_size(self.points.len() as cty::c_int, self.dimensions as cty::c_int);
             for i in 0..self.points.len() {
@@ -53,15 +96,17 @@ impl ParetoProblem {
                     // pareto_set_id(i as cty::c_int, self.points[i].tag);
                 }
             }
-            println!("About to call the solver!");
+            // println!("About to call the solver!");
             pareto_solve();
+            #[cfg(feature = "debug")]
             println!("Solution complete");
             for i in 0..self.points.len() {
                 let r = pareto_get_rank(i as cty::c_int);
                 let id = pareto_get_id(i as cty::c_int);
-
-                println!("Item {} id {} -> rank {}", i, id, r);
                 self.points[id as usize].rank = r;
+
+                #[cfg(feature = "debug")]
+                println!("Item {} id {} -> rank {}", i, id, r);
             }
 
             // pareto_free();

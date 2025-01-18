@@ -377,7 +377,8 @@ void pareto_solve() {
     // pareto_print(stat_problem);
     // bruteforce_rank(stat_problem);
     ecdfk(stat_problem);
-    pareto_print(stat_problem);
+    if (PARETODEBUG)
+        pareto_print(stat_problem);
 }
 int pareto_get_rank(int pn) {
     pareto_point *pt = stat_problem->p[pn];

@@ -4,10 +4,15 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
+argh = "0.1.13"
 cc = "1.2.10"
 cty = "0.2.2"
 pstools_r = {git = "https://github.com/profmadden/pstools_r"}
+scan_fmt = "0.2.6"
 
 [build-dependencies]
 cc = "1.2.10"
 
+[features]
+default = []
+debug = []

@@ -2,6 +2,7 @@ use pareto_r;
 
 pub fn main() {
     println!("Pareto optimization sample code");
+    println!("This program generates pareto.ps, which can be converted to PDF with GhostScript.");
 
     let mut p2 = pareto_r::ParetoProblem::new(2);
     p2.add_point(500, vec![50.0, 50.0]);
@@ -12,4 +13,7 @@ pub fn main() {
 
     p2.solve();
     p2.generate_ps("pareto.ps".to_string(), 20.0, 50.0);
+    for p in &p2.points {
+        println!("Point {} has rank {}", p.tag, p.rank);
+    }
 }
