@@ -1,16 +1,27 @@
-use pareto_r;
+use pareto;
+use argh::FromArgs;
 
-fn main() {
+#[derive(FromArgs)]
+/// Pareto optimal set finding example.
+struct ParArgs {
+    #[argh(option, short = 'f')]
+    /// filename
+    filename: Option<String>,
+}
+
+pub fn main() {
     println!("Pareto optimization sample code");
+    println!("This program generates a PostScript, which can be converted to PDF with GhostScript.");
 
-    let mut p2 = pareto_r::ParetoProblem::new(2);
-    p2.add_point(500, vec![50.0, 50.0]);
-    p2.add_point(99,vec![30.0, 30.0]);
-    p2.add_point(100, vec![10.0, 20.0]);
-    p2.add_point(101, vec![20.0, 10.0]);
-    p2.add_point(33, vec![15.0, 15.0]);
-
-    p2.solve();
-    p2.generate_ps("pareto.ps".to_string(), 20.0, 50.0);
-
+    let arguments: ParArgs = argh::from_env();
+    match arguments.filename {
+        Some(filename) => {
+            println!("Reading from {}", filename);
+            let mut p = pareto::ParetoProblem::from_file(&filename);
+            p.solve();
+            let output = filename.clone() + ".ps";
+            p.generate_ps(output, 10.0, 10.0);
+        },
+        _ => {println!("No input file specified!");}
+    }
 }

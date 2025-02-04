@@ -1,10 +1,10 @@
-use pareto_r;
+use pareto;
 
 pub fn main() {
     println!("Pareto optimization sample code");
     println!("This program generates pareto.ps, which can be converted to PDF with GhostScript.");
 
-    let mut p2 = pareto_r::ParetoProblem::new(2);
+    let mut p2 = pareto::ParetoProblem::new(2);
     p2.add_point(500, vec![50.0, 50.0]);
     p2.add_point(99,vec![30.0, 30.0]);
     p2.add_point(100, vec![10.0, 20.0]);

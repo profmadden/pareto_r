@@ -7,7 +7,7 @@ use std::io::Error;
 use std::io::ErrorKind;
 
 
-use pstools_r;
+use pstools;
 
 extern "C" {
     pub fn pareto_hello();
@@ -114,8 +114,8 @@ impl ParetoProblem {
     }
 
     pub fn generate_ps(&self, filename: String, scale: f32, border: f32) {
-        let mut pst = pstools_r::PSTool::new();
-        let mut bounds = pstools_r::bbox::BBox::new();
+        let mut pst = pstools::PSTool::new();
+        let mut bounds = pstools::bbox::BBox::new();
 
 
         pst.set_color(1.0, 0.0, 0.0, 1.0);

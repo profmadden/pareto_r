@@ -1,9 +1,9 @@
-use pareto_r;
+use pareto;
 
 pub fn main() {
     println!("Pareto optimization sample code");
 
-    let mut problem = pareto_r::ParetoProblem::new(2);
+    let mut problem = pareto::ParetoProblem::new(2);
     for x in 0..10 {
         for y in 0..10 {
             problem.add_point(x*10 + y, vec![x as f32 * 10.0, y as f32 * 10.0]);
