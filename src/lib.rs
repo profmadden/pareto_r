@@ -11,13 +11,7 @@ use pstools;
 
 extern "C" {
     pub fn pareto_hello();
-    // pub unsafe fn pareto_set_size();
-    // pub unsafe fn pareto_set_nv();
-}
-extern "C" {
     pub fn pareto_set_size(num_points: cty::c_int, num_dimensions: cty::c_int);
-}
-extern "C" {
     pub fn pareto_set_nv(pn: cty::c_int, dim: cty::c_int, v: cty::c_float);
     pub fn pareto_free();
     pub fn pareto_solve();
@@ -130,7 +124,7 @@ impl ParetoProblem {
         for p in &self.points{
             pst.add_text(p.v[0], p.v[1], format!("{}:{}", p.tag, p.rank));
         }
-        pst.generate(filename);
+        pst.generate(filename).unwrap();
     }
 
     pub fn hello(&self) {

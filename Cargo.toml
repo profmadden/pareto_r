@@ -7,7 +7,7 @@ edition = "2021"
 argh = "0.1.13"
 cc = "1.2.10"
 cty = "0.2.2"
-pstools = {git = "https://github.com/profmadden/pstools_r"}
+pstools = "0.1.0"
 scan_fmt = "0.2.6"
 
 [build-dependencies]

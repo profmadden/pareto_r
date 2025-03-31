@@ -19,7 +19,7 @@
 #define PARETODEBUG 0
 
 static int compare_index;
-int par_point_compare(const void *a, const void *b)
+static int par_point_compare(const void *a, const void *b)
 {
     pareto_point *point_a, *point_b;
     
@@ -38,7 +38,7 @@ int par_point_compare(const void *a, const void *b)
     return 0;
 }
 
-void pareto_showpoint(pareto_problem *prob, int point_num)
+static void pareto_showpoint(pareto_problem *prob, int point_num)
 {
     int k;
     pareto_point *pt = prob->p[point_num];
@@ -52,7 +52,7 @@ void pareto_showpoint(pareto_problem *prob, int point_num)
 }
 
 
-void pareto_print(pareto_problem *prob)
+static void pareto_print(pareto_problem *prob)
 {
     int n, i;
     
@@ -62,7 +62,7 @@ void pareto_print(pareto_problem *prob)
     }
 }
 
-int pareto_sort(pareto_problem *problem, int index)
+static int pareto_sort(pareto_problem *problem, int index)
 {
     compare_index = index;
     qsort(problem->p, problem->num_points,
@@ -362,6 +362,22 @@ void pareto_set_nv(int pn, int dim, float v) {
 void pareto_set_id(int pn, int tag) {
     stat_problem->points[pn].id = tag;
 }
+// Might need to do some more here.  Depending on tie
+// breaking, some things that should get dominated
+// are interpreted as non-dominated.  Ties on the
+// other axis can make life hard, need a good consistent
+// way to break the ties.
+void pareto_generate_tiebreak(){
+    for (int i = 0; i < stat_problem->num_points; ++i)
+    {
+        float v = 0;
+        for (int d = 0; d < stat_problem->num_dimensions; ++d) {
+            v = v - stat_problem->points[i].v[d];
+        }
+        stat_problem->points[i].tiebreaker = (int) v + i;
+    }
+}
+
 void pareto_free() {
     // Gets rid of a pareto problem.
     if (stat_problem)
